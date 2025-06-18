@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Net;
+﻿using System.Net;
 using HexaVoiceChatShared.MessageProtocol;
 using System;
 
@@ -10,7 +9,7 @@ namespace HexaVoiceChatShared.Net
 		public VoiceChatClient(IPEndPoint remote)
 		{
 			endPoint = remote;
-			socket = new UdpClient();
+			socket = new DisposableUDPClient();
 			socket.Client.ReceiveBufferSize = socketBufferSize;
 			socket.Client.SendBufferSize = socketBufferSize;
 			onMessageAction = delegate (DecodedVoiceChatMessage message, IPEndPoint endPoint)

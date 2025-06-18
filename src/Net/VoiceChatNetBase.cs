@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Net;
+﻿using System.Net;
 using HexaVoiceChatShared.MessageProtocol;
 using static HexaVoiceChatShared.HexaVoiceChat.Protocol;
 using System.Text;
@@ -14,7 +13,7 @@ namespace HexaVoiceChatShared.Net
 	{
 		internal static int socketBufferSize = 1024 * 256;
 		internal Dictionary<string, FragmentQueue> fragmentQueue = new Dictionary<string, FragmentQueue>();
-		internal UdpClient socket;
+		internal DisposableUDPClient socket;
 		internal IPEndPoint endPoint;
 		internal Action<DecodedVoiceChatMessage, IPEndPoint> onMessageAction;
 		internal Dictionary<VoiceChatMessageType, Action<DecodedVoiceChatMessage, IPEndPoint>> onMessageActions = new Dictionary<VoiceChatMessageType, Action<DecodedVoiceChatMessage, IPEndPoint>>();
@@ -59,7 +58,7 @@ namespace HexaVoiceChatShared.Net
 			//if (!newServer.Equals(endPoint))
 			//{
 			//	Close();
-			//	socket = new UdpClient();
+			//	socket = new DisposableUDPClient();
 			//	socket.Client.ReceiveBufferSize = socketBufferSize;
 			//	socket.Client.SendBufferSize = socketBufferSize;
 			//	endPoint = newServer;
@@ -75,6 +74,11 @@ namespace HexaVoiceChatShared.Net
 
 		internal void Recieve(IAsyncResult result)
 		{
+			if (socket.IsDisposed)
+			{
+				return;
+			}
+
 			try
 			{
 				IPEndPoint from = new IPEndPoint(IPAddress.Any, 0);
