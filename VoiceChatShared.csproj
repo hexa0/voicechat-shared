@@ -5,6 +5,7 @@
 	<TargetFrameworks>net35;net9.0</TargetFrameworks>
 	<PlatformTarget>x64</PlatformTarget>
 	<ApplicationIcon>40bucks.ico</ApplicationIcon>
+	<AssemblyName>com.hexa0.voicechatshared</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
