@@ -1,6 +1,7 @@
 ﻿using static HexaVoiceChatShared.HexaVoiceChat.Protocol;
 using System.Text;
 using System;
+using System.Linq;
 
 namespace HexaVoiceChatShared.MessageProtocol
 {

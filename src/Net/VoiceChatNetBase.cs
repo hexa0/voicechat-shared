@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
 using HexaVoiceChatShared.MessageProtocol;
 using static HexaVoiceChatShared.HexaVoiceChat.Protocol;
 using System.Text;
+using System.Collections.Generic;
+using System;
 
 // huge shoutout to https://github.com/tom-weiland/tcp-udp-networking/tree/tutorial-part3 for being like the only source i could reference for implementing this, i was loosing my mind trying to make this two-way
 
@@ -18,12 +18,20 @@ namespace HexaVoiceChatShared.Net
 		internal IPEndPoint endPoint;
 		internal Action<DecodedVoiceChatMessage, IPEndPoint> onMessageAction;
 		internal Dictionary<VoiceChatMessageType, Action<DecodedVoiceChatMessage, IPEndPoint>> onMessageActions = new Dictionary<VoiceChatMessageType, Action<DecodedVoiceChatMessage, IPEndPoint>>();
-		
-		public void SendMessage(byte[] data, IPEndPoint? client = null)
+
+#if NET9_0_OR_GREATER
+#nullable enable
+		public void SendMessage(byte[] data, IPEndPoint? client)
 		{
 			socket.SendAsync(data, data.Length, client);
-			// socket.BeginSend(data, data.Length, client, null, null);
 		}
+#nullable disable
+#elif NET35
+		public void SendMessage(byte[] data, IPEndPoint client = null)
+		{
+			socket.BeginSend(data, data.Length, client, null, null);
+		}
+#endif
 
 		public void OnMessage(VoiceChatMessageType type, Action<DecodedVoiceChatMessage, IPEndPoint> action)
 		{
@@ -119,7 +127,7 @@ namespace HexaVoiceChatShared.Net
 			catch (Exception e)
 			{
 				// likely a throw when we change the relay server
-				// Console.WriteLine(e);
+				Console.Error.WriteLine(e);
 			}
 
 			try
@@ -130,7 +138,7 @@ namespace HexaVoiceChatShared.Net
 			{
 				// also likely a throw from changing a relay server,
 				// if this is throwing from other means that is BAD
-				// Console.WriteLine(e);
+				Console.Error.WriteLine(e);
 			}
 		}
 	}

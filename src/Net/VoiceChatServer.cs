@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Net;
 using HexaVoiceChatShared.MessageProtocol;
+using System;
 
 namespace HexaVoiceChatShared.Net
 {
