@@ -74,7 +74,7 @@ namespace HexaVoiceChatShared.Net
 
 		internal void Recieve(IAsyncResult result)
 		{
-			if (!socket.IsDisposed) { return; }
+			if (socket.IsDisposed) { return; }
 
 			try
 			{
@@ -133,7 +133,7 @@ namespace HexaVoiceChatShared.Net
 
 			try
 			{
-				if (!socket.IsDisposed) { return; }
+				if (socket.IsDisposed) { return; }
 
 				socket.BeginReceive(Recieve, null);
 			}
