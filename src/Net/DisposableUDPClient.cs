@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 class DisposableUDPClient : UdpClient
@@ -9,6 +10,15 @@ class DisposableUDPClient : UdpClient
 	{
 		IsDisposed = true;
 		base.Dispose(disposing);
+	}
+
+	public void Shutdown()
+	{
+		Console.WriteLine("Shutting down DisposableUDPClient.");
+
+		Client.Shutdown(SocketShutdown.Both);
+		Client.Close();
+		Dispose(true);
 	}
 
 	public DisposableUDPClient() : base() { }

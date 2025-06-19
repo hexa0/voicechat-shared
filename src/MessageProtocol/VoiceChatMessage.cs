@@ -1,13 +1,13 @@
-﻿using static HexaVoiceChatShared.HexaVoiceChat.Protocol;
-using System.Text;
+﻿using System.Text;
 using System;
 using System.Linq;
+using static HexaVoiceChatShared.HVCProtocol;
 
 namespace HexaVoiceChatShared.MessageProtocol
 {
 	public class VoiceChatMessage
 	{
-		internal static byte[] BuildMessageHeader(VoiceChatMessageType type)
+		internal static byte[] BuildMessageHeader(HVCMessage type)
 		{
 			int length = magicHeader.Length + 1;
 			byte[] header = new byte[length];
@@ -17,7 +17,7 @@ namespace HexaVoiceChatShared.MessageProtocol
 
 			return header;
 		}
-		public static byte[] BuildMessage(VoiceChatMessageType type, byte[] body)
+		public static byte[] BuildMessage(HVCMessage type, byte[] body)
 		{
 			byte[] header = BuildMessageHeader(type);
 			byte[] message = new byte[header.Length + body.Length + magicFooter.Length];
@@ -47,7 +47,7 @@ namespace HexaVoiceChatShared.MessageProtocol
 
 			if (CheckForHeader(message))
 			{
-				decoded.type = (VoiceChatMessageType)message[magicHeader.Length];
+				decoded.type = (HVCMessage)message[magicHeader.Length];
 				decoded.body = new byte[length - magicHeader.Length - magicFooter.Length - 1];
 				Buffer.BlockCopy(message, magicHeader.Length + 1, decoded.body, 0, length - magicHeader.Length - magicFooter.Length - 1);
 			}
@@ -62,7 +62,7 @@ namespace HexaVoiceChatShared.MessageProtocol
 
 	public class DecodedVoiceChatMessage
 	{
-		public VoiceChatMessageType type;
+		public HVCMessage type;
 		public byte[] body;
 		public byte[] raw;
 	}

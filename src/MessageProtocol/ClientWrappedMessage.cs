@@ -1,5 +1,4 @@
 ﻿using System;
-using static HexaVoiceChatShared.HexaVoiceChat.Protocol;
 
 namespace HexaVoiceChatShared.MessageProtocol
 {
@@ -9,7 +8,7 @@ namespace HexaVoiceChatShared.MessageProtocol
 		{
 			return BitConverter.GetBytes(clientId);
 		}
-		public static byte[] BuildMessage(ulong clientId, VoiceChatMessageType type, byte[] body)
+		public static byte[] BuildMessage(ulong clientId, HVCMessage type, byte[] body)
 		{
 			byte[] header = BuildMessageHeader(clientId, body);
 			byte[] message = new byte[header.Length + body.Length];

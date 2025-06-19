@@ -6,6 +6,12 @@
 	<PlatformTarget>x64</PlatformTarget>
 	<ApplicationIcon>40bucks.ico</ApplicationIcon>
 	<AssemblyName>com.hexa0.voicechatshared</AssemblyName>
+	<FileVersion>0.0.0.0</FileVersion>
+	<AssemblyVersion>0.0.0.0</AssemblyVersion>
+	<NeutralLanguage>lo</NeutralLanguage>
+	<PackageReleaseNotes></PackageReleaseNotes>
+	<Company>ur mom</Company>
+	<Product>deez</Product>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,31 +1,14 @@
 ﻿using System.Net;
-using HexaVoiceChatShared.MessageProtocol;
 using System;
 
 namespace HexaVoiceChatShared.Net
 {
-	public class VoiceChatServer : VoiceChatNetBase
+	public class VoiceChatServer : UDP
 	{
-		public VoiceChatServer(IPEndPoint remote)
+		public VoiceChatServer(IPEndPoint remote) : base(remote, true)
 		{
-			Console.WriteLine($"VoiceChatServer: Listening on port {remote.Port} from {remote.Address}");
-			endPoint = remote;
-			socket = new DisposableUDPClient(endPoint);
-			socket.Client.ReceiveBufferSize = socketBufferSize;
-			socket.Client.SendBufferSize = socketBufferSize;
-			onMessageAction = delegate (DecodedVoiceChatMessage message, IPEndPoint endPoint)
-			{
-				if (onMessageActions.ContainsKey(message.type))
-				{
-					onMessageActions[message.type].Invoke(message, endPoint);
-				}
-				else
-				{
-					Console.WriteLine($"VoiceChatMessageType of \"{message.type}\" wasn't handled by the VoiceChatServer");
-				}
-			};
-
-			Connect(false);
+			Console.WriteLine($"VoiceChatServer: Started");
+			Listen();
 		}
 	}
 }
