@@ -20,7 +20,7 @@ namespace HexaVoiceChatShared.Net
 
 #if NET9_0_OR_GREATER
 #nullable enable
-		public void SendMessage(byte[] data, IPEndPoint? client)
+		public void SendMessage(byte[] data, IPEndPoint? client = null)
 		{
 			socket.SendAsync(data, data.Length, client);
 		}
