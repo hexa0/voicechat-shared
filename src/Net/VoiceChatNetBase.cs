@@ -74,75 +74,73 @@ namespace HexaVoiceChatShared.Net
 
 		internal void Recieve(IAsyncResult result)
 		{
-			if (socket.IsDisposed)
+			if (!socket.IsDisposed)
 			{
-				return;
-			}
-
-			try
-			{
-				IPEndPoint from = new IPEndPoint(IPAddress.Any, 0);
-				byte[] bytes = socket.EndReceive(result, ref from);
-
-				FragmentQueue queue;
-
-				if (!fragmentQueue.ContainsKey(from.Address.ToString()))
+				try
 				{
-					queue = new FragmentQueue();
-					fragmentQueue.Add(from.Address.ToString(), queue);
+					IPEndPoint from = new IPEndPoint(IPAddress.Any, 0);
+					byte[] bytes = socket.EndReceive(result, ref from);
+
+					FragmentQueue queue;
+
+					if (!fragmentQueue.ContainsKey(from.Address.ToString()))
+					{
+						queue = new FragmentQueue();
+						fragmentQueue.Add(from.Address.ToString(), queue);
+					}
+					else
+					{
+						queue = fragmentQueue[from.Address.ToString()];
+					}
+
+					try
+					{
+						Buffer.BlockCopy(bytes, 0, queue.data, queue.dataOffest, bytes.Length);
+						queue.dataOffest += bytes.Length;
+
+						if (VoiceChatMessage.CheckForFooter(bytes))
+						{
+							DecodedVoiceChatMessage message = VoiceChatMessage.DecodeMessage(queue.data, queue.dataOffest);
+
+							if (HexaVoiceChat.logRecievedMessages)
+							{
+								Console.WriteLine($"from {from} : {Math.Round(queue.dataOffest / 128f, 3)} KiB, type: {message.type}");
+							}
+
+							queue.dataOffest = 0;
+
+							try
+							{
+								onMessageAction.Invoke(message, from);
+							}
+							catch (Exception e)
+							{
+								Console.WriteLine($"an onMessage action failed:\n{e}");
+							}
+						}
+					}
+					catch (Exception exception)
+					{
+						queue.dataOffest = 0;
+						Console.WriteLine($"Received broadcast from {from} : {Math.Round(bytes.Length / 128f, 3)} KiB, failed to decode {Encoding.ASCII.GetString(bytes)}, \n{exception}");
+					}
 				}
-				else
+				catch (Exception e)
 				{
-					queue = fragmentQueue[from.Address.ToString()];
+					// likely a throw when we change the relay server
+					Console.Error.WriteLine(e);
 				}
 
 				try
 				{
-					Buffer.BlockCopy(bytes, 0, queue.data, queue.dataOffest, bytes.Length);
-					queue.dataOffest += bytes.Length;
-
-					if (VoiceChatMessage.CheckForFooter(bytes))
-					{
-						DecodedVoiceChatMessage message = VoiceChatMessage.DecodeMessage(queue.data, queue.dataOffest);
-
-						if (HexaVoiceChat.logRecievedMessages)
-						{
-							Console.WriteLine($"from {from} : {Math.Round(queue.dataOffest / 128f, 3)} KiB, type: {message.type}");
-						}
-
-						queue.dataOffest = 0;
-
-						try
-						{
-							onMessageAction.Invoke(message, from);
-						}
-						catch (Exception e)
-						{
-							Console.WriteLine($"an onMessage action failed:\n{e}");
-						}
-					}
+					socket.BeginReceive(Recieve, null);
 				}
-				catch (Exception exception)
+				catch (Exception e)
 				{
-					queue.dataOffest = 0;
-					Console.WriteLine($"Received broadcast from {from} : {Math.Round(bytes.Length / 128f, 3)} KiB, failed to decode {Encoding.ASCII.GetString(bytes)}, \n{exception}");
+					// also likely a throw from changing a relay server,
+					// if this is throwing from other means that is BAD
+					Console.Error.WriteLine(e);
 				}
-			}
-			catch (Exception e)
-			{
-				// likely a throw when we change the relay server
-				Console.Error.WriteLine(e);
-			}
-
-			try
-			{
-				socket.BeginReceive(Recieve, null);
-			}
-			catch (Exception e)
-			{
-				// also likely a throw from changing a relay server,
-				// if this is throwing from other means that is BAD
-				Console.Error.WriteLine(e);
 			}
 		}
 	}
