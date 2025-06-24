@@ -28,6 +28,7 @@
 		SetMicDeviceId, // DeviceNumber
 		SetMicBufferMillis, // BufferMilliseconds
 		SetMicBufferCount, // NumberOfBuffers
+		SetMicChannels, // Channels
 		SetBitrate,
 		SetListening,
 
