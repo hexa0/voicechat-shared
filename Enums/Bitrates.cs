@@ -1,4 +1,4 @@
-﻿namespace VoiceChatShared
+﻿namespace VoiceChatShared.Enums
 {
 	public enum Bitrate : byte
 	{

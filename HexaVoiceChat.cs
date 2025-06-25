@@ -1,4 +1,4 @@
-﻿namespace HexaVoiceChatShared
+﻿namespace VoiceChatShared
 {
 	public static class HexaVoiceChat
 	{
