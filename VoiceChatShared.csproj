@@ -1,21 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<AssemblyTitle>VoiceChatShared</AssemblyTitle>
+		<Version>0.0.0</Version>
+		<FileVersion>$(Version)</FileVersion>
+		<OutputType>Library</OutputType>
+		<TargetFrameworks>net35;net9.0</TargetFrameworks>
+		<Platforms>x64</Platforms>
+		<PlatformTarget>x64</PlatformTarget>
+		<AssemblyName>com.hexa0.voicechatshared</AssemblyName>
+		<ApplicationIcon>40bucks.ico</ApplicationIcon>
+		<NeutralLanguage>en</NeutralLanguage>
+		<Trademark>UnFuck™️ your USB</Trademark>
+		<Company>ur mom</Company>
+		<Product>deez</Product>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Configurations>Release</Configurations>
+	</PropertyGroup>
 
-  <PropertyGroup>
-	<OutputType>Library</OutputType>
-	<TargetFrameworks>net35;net9.0</TargetFrameworks>
-	<PlatformTarget>x64</PlatformTarget>
-	<ApplicationIcon>40bucks.ico</ApplicationIcon>
-	<AssemblyName>com.hexa0.voicechatshared</AssemblyName>
-	<FileVersion>0.0.0.0</FileVersion>
-	<AssemblyVersion>0.0.0.0</AssemblyVersion>
-	<NeutralLanguage>lo</NeutralLanguage>
-	<PackageReleaseNotes></PackageReleaseNotes>
-	<Company>ur mom</Company>
-	<Product>deez</Product>
-  </PropertyGroup>
+	<Target Name="ConvertToMdb" AfterTargets="Build" Condition=" '$(TargetFramework)' == 'net35' ">
+		<PropertyGroup>
+			<Pdb2MdbToolPath>$(PkgMono_pdb2mdb)\tools\pdb2mdb.exe</Pdb2MdbToolPath>
+		</PropertyGroup>
 
-  <ItemGroup>
-	<Content Include="40bucks.ico" />
-  </ItemGroup>
+		<Error Text="The pdb2mdb NuGet package seems to be missing." Condition="!Exists('$(Pdb2MdbToolPath)')" />
 
+		<Message Text="Converting PDB to MDB for $(TargetPath) using NuGet package..." Importance="high" />
+
+		<Exec Command="&quot;$(Pdb2MdbToolPath)&quot; &quot;$(TargetPath)&quot;" />
+	</Target>
+
+	<ItemGroup>
+	  <PackageReference Include="Mono.pdb2mdb" Version="0.1.0.20130128" PrivateAssets="all" />
+	</ItemGroup>
 </Project>
