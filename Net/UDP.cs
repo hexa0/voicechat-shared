@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Sockets;
 using VoiceChatShared.Net.Disposables;
 
 namespace VoiceChatShared.Net
@@ -108,6 +109,16 @@ namespace VoiceChatShared.Net
 		{
 			// this should be handled on a case by case basis in extensions of this class
 			return 0;
+		}
+
+		public static int GetOpenPort()
+		{
+			using (UdpClient udpClient = new UdpClient(new IPEndPoint(IPAddress.Loopback, 0)))
+			{
+				int availablePort = ((IPEndPoint)udpClient.Client.LocalEndPoint).Port;
+
+				return availablePort;
+			}
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace VoiceChatShared.Net
 			get { return (IPEndPoint)clientSocket.Client.LocalEndPoint; }
 		}
 
-		private byte[] receiveBuffer = new byte[socketBufferSize];
+		private readonly byte[] receiveBuffer = new byte[socketBufferSize];
 
 		public class Client<T> where T : Enum
 		{
@@ -30,7 +30,7 @@ namespace VoiceChatShared.Net
 			public IPEndPoint endPoint;
 			public Action<Client<T>> onDisconnect;
 
-			private byte[] receiveBuffer = new byte[socketBufferSize];
+			private readonly byte[] receiveBuffer = new byte[socketBufferSize];
 
 			bool connected = true;
 
@@ -225,15 +225,8 @@ namespace VoiceChatShared.Net
 		{
 			Console.WriteLine("TCP Closed");
 
-			if (clientSocket != null)
-			{
-				clientSocket.Shutdown();
-			}
-
-			if (listenerSocket != null)
-			{
-				listenerSocket.Shutdown();
-			}
+			clientSocket?.Shutdown();
+			listenerSocket?.Shutdown();
 
 			Disconnected(endPoint);
 		}
@@ -314,15 +307,18 @@ namespace VoiceChatShared.Net
 
 		public override void Close()
 		{
-			if (clientSocket != null)
-			{
-				clientSocket.Shutdown();
-			}
+			clientSocket?.Shutdown();
+			listenerSocket?.Shutdown();
+		}
 
-			if (listenerSocket != null)
-			{
-				listenerSocket.Shutdown();
-			}
+		public static int GetOpenPort()
+		{
+			TcpListener dummyListener = new TcpListener(IPAddress.Loopback, 0);
+			dummyListener.Start();
+			int availablePort = ((IPEndPoint)dummyListener.LocalEndpoint).Port;
+			dummyListener.Stop();
+
+			return availablePort;
 		}
 	}
 }

@@ -15,7 +15,10 @@
 		<Product>deez</Product>
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>
+		<PathMap>$(MSBuildProjectDirectory)=./</PathMap>
 		<Configurations>Release</Configurations>
+		<!-- unsupported on net35 yet the new compiler complains about it-->
+		<NoWarn>IDE0290,IDE0090,IDE0028</NoWarn>
 	</PropertyGroup>
 
 	<Target Name="ConvertToMdb" AfterTargets="Build" Condition=" '$(TargetFramework)' == 'net35' ">
