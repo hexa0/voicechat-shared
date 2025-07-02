@@ -120,5 +120,10 @@ namespace VoiceChatShared.Net
 				return availablePort;
 			}
 		}
+
+		public new bool Disposed
+		{
+			get { return socket.IsDisposed; }
+		}
 	}
 }

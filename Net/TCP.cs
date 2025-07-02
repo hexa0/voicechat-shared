@@ -320,5 +320,24 @@ namespace VoiceChatShared.Net
 
 			return availablePort;
 		}
+
+		public new bool Disposed
+		{
+			get
+			{
+				if (clientSocket != null)
+				{
+					return clientSocket.IsDisposed || !clientSocket.Connected;
+				}
+				else if (listenerSocket != null)
+				{
+					return listenerSocket.IsDisposed;
+				}
+				else
+				{
+					return true;
+				}
+			}
+		}
 	}
 }

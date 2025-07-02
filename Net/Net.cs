@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace VoiceChatShared.Net
@@ -165,6 +166,11 @@ namespace VoiceChatShared.Net
 		public void OnDisconnect(Action<IPEndPoint> action)
 		{
 			onDisconnectActions.Add(action);
+		}
+
+		public bool Disposed
+		{
+			get { return false; }
 		}
 	}
 }
