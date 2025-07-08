@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Sockets;
 using System.Threading;
 
-namespace VoiceChatShared.Net
+namespace HexaNet
 {
 	public class Net<MessageEnum> : INet<MessageEnum> where MessageEnum : Enum
 	{

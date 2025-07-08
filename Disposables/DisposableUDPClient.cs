@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace VoiceChatShared.Net.Disposables
+namespace HexaNet.Disposables
 {
 	class DisposableUDPClient : UdpClient
 	{

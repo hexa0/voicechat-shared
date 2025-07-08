@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VoiceChatShared.Net
+namespace HexaNet
 {
 	public static class NetData
 	{

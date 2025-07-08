@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using VoiceChatShared.Net.Disposables;
+using HexaNet.Disposables;
 
-namespace VoiceChatShared.Net
+namespace HexaNet
 {
 	public class UDP<MessageEnum> : Net<MessageEnum> where MessageEnum : Enum
 	{

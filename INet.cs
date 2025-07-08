@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace VoiceChatShared.Net
+namespace HexaNet
 {
 	internal interface INet<MessageEnum> where MessageEnum : Enum
 	{

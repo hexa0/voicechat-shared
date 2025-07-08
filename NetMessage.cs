@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VoiceChatShared.Net
+namespace HexaNet
 {
 	public class NetMessage<MessageEnum> where MessageEnum : Enum
 	{

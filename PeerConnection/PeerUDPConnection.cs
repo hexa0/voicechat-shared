@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace VoiceChatShared.Net.PeerConnection
+namespace HexaNet.PeerConnection
 {
 	public class PeerUDPConnection<MessageEnum> : UDP<MessageEnum> where MessageEnum : Enum
 	{
